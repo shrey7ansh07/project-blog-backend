@@ -22,7 +22,7 @@ const UserSchema =  mongoose.Schema(
     },
     coverImage : {
         type: String, //* url from cloudinary
-        required: true,
+        default: ""
     },
     blogsread : [{
             type : mongoose.Schema.Types.ObjectId,
