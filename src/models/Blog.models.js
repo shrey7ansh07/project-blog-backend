@@ -28,6 +28,11 @@ const BlogSchema = mongoose.Schema(
         {
             type: Number,
             default: 0,
+        },
+        isPosted:
+        {
+            type: Boolean,
+            default: false
         }
     },
     {
