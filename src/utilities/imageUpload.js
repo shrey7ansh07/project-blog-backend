@@ -1,7 +1,7 @@
 import {v2 as fileuploader} from "cloudinary"
-import {fs} from "fs"
+import fs from "fs"
 
-cloudinary.config({ 
+fileuploader.config({ 
   cloud_name: process.env.CLOUDINARY_CLOUDNAME, 
   api_key: process.env.CLOUDINARY_API_KEY, 
   api_secret: process.env.CLOUDINARY_API_SECRET 
@@ -10,8 +10,9 @@ cloudinary.config({
 const uploadOnCloudinary = async (localFilePath) => {
     try{
         if(!localFilePath) return null;
-        const response = await fileuploader.uploader.upload(localFilePath)
-        console.log("image Uploaded succesfully",response.url)
+        const response = await fileuploader.uploader.upload(localFilePath,
+            {resource_type: "auto"})
+        fs.unlinkSync(localFilePath)
         return response
     }
     catch(error){
@@ -20,6 +21,7 @@ const uploadOnCloudinary = async (localFilePath) => {
     }
 
 }
+export {uploadOnCloudinary}
 
 //* now we will create the multer as a middleware over here so that while uploading fileuploader
 //* on cloudinary we get this on our local system (server) and then extract the link 
