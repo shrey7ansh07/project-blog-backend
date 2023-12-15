@@ -9,22 +9,24 @@ const UserSchema =  mongoose.Schema(
         required: true,
         lowercase: true,
         unique: true,
-        index: true
+        index: true,
+        trim : true
     },
     email : {
         type: String,
         required: true,
-        lowercase: true,
         unique: true,
+        trim : true,
+        lowercase: true
     },
     fullname : {
         type: String,
         required: true,
         lowercase: true,
+        trim: true
     },
-    coverImage : {
+    coverimage : {
         type: String, //* url from cloudinary
-        default: ""
     },
     blogsread : [{
             type : mongoose.Schema.Types.ObjectId,
@@ -36,8 +38,12 @@ const UserSchema =  mongoose.Schema(
     }],
     //* these consist of the id's of the blogs he read
     password : {
+        type: String, //* because we will decrypt the password before storing it 
         required: [true, "password is required"],
-        type: String //* because we will decrypt the password before storing it 
+       
+    },
+    refreshToken: {
+        type: String,
     }
 },
 {
@@ -49,7 +55,7 @@ UserSchema.pre("save", async function(next)
 {
     if(!this.isModified("password")) return next();
     try{
-        this.password = await bcrypt.hash(this.password,process.env.SALT_ROUNDS);
+        this.password = await bcrypt.hash(this.password,10);
         next();
     }
     catch (error){
@@ -64,8 +70,8 @@ UserSchema.methods.isPasswordCorrect = async function(password)
 
 UserSchema.methods.generateAccessToken = function()
 {
-    jwt.sign({
-        id: _id,
+return jwt.sign({
+        _id: this._id,
         email: this.email,
         username: this.username,
         fullname: this.fullname
@@ -76,8 +82,9 @@ UserSchema.methods.generateAccessToken = function()
 }
 UserSchema.methods.generateRefreshToken = function()
 {
-    jwt.sign({
-        id: _id,
+return jwt.sign(
+    {
+        _id: this._id,
     },
         process.env.REFRESH_TOKEN_SECRET,
        { expiresIn: process.env.REFRESH_TOKEN_EXPIRY}
