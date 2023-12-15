@@ -1,7 +1,7 @@
 class ErrorDealer extends Error {
     constructor(
         statusCode,
-        Errormessage= "didn't went well",
+        message = "didn't went well",
         error = [],
         errorStack = ""
     )
@@ -9,7 +9,7 @@ class ErrorDealer extends Error {
         super(message)
         this.statusCode = statusCode,
         this.data =  null,
-        this.message = Errormessage,
+        this.message = message,
         this.success = false,
         this.errors = error,
         this.stack = errorStack
