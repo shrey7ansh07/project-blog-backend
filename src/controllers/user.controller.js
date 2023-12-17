@@ -3,6 +3,7 @@ import {ErrorDealer} from "../utilities/errorHandler.js"
 import {User} from "../models/User.models.js"
 import {uploadOnCloudinary} from "../utilities/imageUpload.js"
 import {APIresponse} from "../utilities/apiHandlerRes.js"
+import jwt from "jsonwebtoken"
 
 const generateAccessAndRefereshTokens = async (userId) =>{
     try {
@@ -138,4 +139,44 @@ const logOutUser =  asyncHandler(async (req,res) => {
     .json(new APIresponse(200, "Logout Successfully"))
 })
 
-export {registerUser,loginUser, logOutUser}
+const refreshAccessToken = asyncHandler(async (req, res) => {
+    const refreshTokenUser = req.cookies.refreshToken || req.body.refreshToken
+    if(!refreshTokenUser)
+    {
+        throw new ErrorDealer(401, "unauthorized request : refreshtoken is invalid")
+    }
+  try {
+      const decodedToken = jwt.verify(refreshTokenUser,process.env.REFRESH_TOKEN_SECRET)
+      //* since i have only id as an attribute provided to the refreh token for a user we can use it 
+      const user = await User.findById(decodedToken?._id)
+      if(!user) {throw new ErrorDealer(401, "user does not exist")}
+      if(refreshTokenUser !== user.refreshToken)
+      {
+          throw new ErrorDealer(402, "refreh token is expired")
+      }
+      const options = 
+      {
+          httpOnly: true,
+          secure: true
+      }
+      const {accessToken,newrefreshToken} = await user.generateAccessAndRefereshTokens(user._id)
+  
+      return res
+      .status(200)
+      .cookies("accessToken",accessToken,options)
+      .cookies("refreshToken",newrefreshToken,options)
+      .json(
+          new APIresponse(200,
+              {
+                  accessToken,
+                  refreshToken: newrefreshToken
+              },"access token refreshed")
+      )
+  
+  } catch (error) {
+        throw new ErrorDealer(405, error?.message||"invalid refresh token provided")
+  }
+    
+})
+
+export {registerUser,loginUser, logOutUser,refreshAccessToken}
