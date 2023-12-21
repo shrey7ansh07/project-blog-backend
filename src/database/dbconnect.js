@@ -3,7 +3,7 @@ export const connectDB = async () => {
     try{
         const connectionSuccess = await mongoose.connect(`${process.env.MONGODB_URL}`)
         //* it takes some time to connect hence await
-        console.log(`DATABASE connected and HOST IS ${connectionSuccess}`)
+        console.log(`DATABASE connected Successfully`)
     }
     catch{
         console.error("ERROR occured while connecting to database")
