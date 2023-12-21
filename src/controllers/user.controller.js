@@ -87,16 +87,21 @@ const loginUser = asyncHandler(async (req,res) => {
     //* return an response to the user 
 
     const {username, email, password} = req.body  //* step 1
-    // console.log(username,email,password)
+          
+
 
     if(username === undefined && email === undefined) {throw new ErrorDealer(418, "Enter email or username")} //* step 2
+    
 
     const user = await User.findOne({$or: [{username :username}, {email :email}]})
-    if(!user) {throw new ErrorDealer(409, "User not found")} //* step 3
+    if(!user) {throw new ErrorDealer(404, "User not found")} //* step 3
+
 
     const existingUser = await user.isPasswordCorrect(password)
+    
+ 
 
-    if(!existingUser) {throw new ErrorDealer(418, "Invalid Credentials")} //* step 4
+    if(!existingUser) {throw new ErrorDealer(401, "Invalid Credentials")} //* step 4
 
     const {refreshToken, accessToken} = await generateAccessAndRefereshTokens(user._id) //* step 5 and 6
 
@@ -115,7 +120,7 @@ const loginUser = asyncHandler(async (req,res) => {
         new APIresponse(
             200, 
             {
-                user: loggedInUser, accessToken
+                user: loggedInUser
             },
             "User logged In Successfully"
         )
@@ -143,7 +148,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     const refreshTokenUser = req.cookies.refreshToken || req.body.refreshToken
     if(!refreshTokenUser)
     {
-        throw new ErrorDealer(401, "unauthorized request : refreshtoken is invalid")
+        throw new ErrorDealer(402, "unauthorized request : refreshtoken is invalid")
     }
   try {
       const decodedToken = jwt.verify(refreshTokenUser,process.env.REFRESH_TOKEN_SECRET)
@@ -166,15 +171,11 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       .cookies("accessToken",accessToken,options)
       .cookies("refreshToken",newrefreshToken,options)
       .json(
-          new APIresponse(200,
-              {
-                  accessToken,
-                  refreshToken: newrefreshToken
-              },"access token refreshed")
+          new APIresponse(200,"access token refreshed")
       )
   
   } catch (error) {
-        throw new ErrorDealer(405, error?.message||"invalid refresh token provided")
+        throw new ErrorDealer(401, error?.message||"invalid refresh token provided")
   }
     
 })
