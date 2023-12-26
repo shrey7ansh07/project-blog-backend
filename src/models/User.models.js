@@ -28,20 +28,46 @@ const UserSchema =  mongoose.Schema(
     coverimage : {
         type: String, //* url from cloudinary
     },
+    quote : {
+        type: String
+    },
+    bio : {
+        type: String
+    },
+    links: [{
+            type: String
+    }],
+    quote: {
+        type: String
+    },
+    followers: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+    }],
+    following: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+    }],
     blogsread : [{
             type : mongoose.Schema.Types.ObjectId,
-            ref : "blogs" 
+            ref : "Blog" 
         }],
     blogsliked : [{
             type : mongoose.Schema.Types.ObjectId,
-            ref : "blogs"
+            ref : "Blog"
     }],
+    blogsonread : [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Blog"
+    }],
+
     //* these consist of the id's of the blogs he read
     password : {
         type: String, //* because we will decrypt the password before storing it 
         required: [true, "password is required"],
        
     },
+    
     refreshToken: {
         type: String,
     }
