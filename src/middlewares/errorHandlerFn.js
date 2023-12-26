@@ -1,5 +1,6 @@
 import {ErrorDealer} from "../utilities/errorHandler.js"
 function errorHandlerFn(err, req, res, next) {
+    console.log(err);
     if (err instanceof ErrorDealer) {
       res.status(err.statusCode).json({
         success: err.success,
@@ -7,7 +8,7 @@ function errorHandlerFn(err, req, res, next) {
         errors: err.errors,
       });
     } else {
-      res.status(500).json({ message: 'An unexpected error occurred' });
+      res.status(500).json({ message: 'An unexpected error occurred blah blah' });
     }
   }
 
