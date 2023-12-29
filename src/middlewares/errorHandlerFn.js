@@ -1,6 +1,5 @@
 import {ErrorDealer} from "../utilities/errorHandler.js"
 function errorHandlerFn(err, req, res, next) {
-    console.log(err);
     if (err instanceof ErrorDealer) {
       res.status(err.statusCode).json({
         success: err.success,
