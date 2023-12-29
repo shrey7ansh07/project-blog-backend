@@ -33,6 +33,12 @@ const BlogSchema = mongoose.Schema(
         {
             type: Boolean,
             default: false
+        },
+        genre:
+        {
+            type: String,
+            enum: ["Personal", "Business", "News", "Professional", "Niche", "Lifestyle", "Fitness", "Food", "Travel", "Fashion", "Beauty", "DIY", "Finance", "Parenting", "Health and Wellness", "Music", "Movie", "Car", "Gaming", "Tech"],
+            required: true,
         }
     },
     {
