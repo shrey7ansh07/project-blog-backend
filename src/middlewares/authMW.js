@@ -12,7 +12,6 @@ const verifyUser = asyncHandler(async (req,res,next) => {
         const user = await User.findById(decodedToken?._id).select("-password -refreshtoken")
         if(!user) {throw new ErrorDealer(401,"Invalid access token")}
         req.user = user
-        console.log(req);
         next()
     } catch (error) {
         next(error)
