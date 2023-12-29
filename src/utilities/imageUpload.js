@@ -21,7 +21,19 @@ const uploadOnCloudinary = async (localFilePath) => {
     }
 
 }
-export {uploadOnCloudinary}
+
+const deleteFromCloudinary = async (localFilePath) => {
+    try {
+        if(!localFilePath) return null
+        const response = await fileuploader.uploader.destroy(localFilePath,
+            {resource_type : "auto"})
+        return response
+    } catch (error) {
+        return null
+    }
+}
+export {uploadOnCloudinary,deleteFromCloudinary}
+
 
 //* now we will create the multer as a middleware over here so that while uploading fileuploader
 //* on cloudinary we get this on our local system (server) and then extract the link 
