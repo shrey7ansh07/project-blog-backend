@@ -1,7 +1,7 @@
 import {asyncHandler} from "../utilities/asyncHandler.js"
 import {ErrorDealer} from "../utilities/errorHandler.js"
 import {User} from "../models/User.models.js"
-import {uploadOnCloudinary} from "../utilities/imageUpload.js"
+import {uploadOnCloudinary,deleteFromCloudinary} from "../utilities/imageUpload.js"
 import {APIresponse} from "../utilities/apiHandlerRes.js"
 import jwt from "jsonwebtoken"
 
@@ -34,9 +34,6 @@ const registerUser = asyncHandler(async (req,res) => {
     //* create an user object and save it in the db (User)
     //* response to be received back by removing the password and refresh token
 
-    var coverimageUrl = ""
-    var followers = 0
-    var following = 0
     const {username, fullname, email, password} = req.body //* step 1
     // console.log("email : ", email)
     if([username,fullname,email,password].some((feild) => feild?.trim() === undefined))
@@ -266,6 +263,8 @@ const uploadImage = asyncHandler(async(req,res,next) => {
     const coverimageLocalPath = req.file.path;
     // console.log(coverimageLocalPath)
     //* uploaded on cloudinary
+    const prevImage = req.user.coverimage
+
 
     try {
         const coverimage = await uploadOnCloudinary(coverimageLocalPath)
@@ -280,6 +279,19 @@ const uploadImage = asyncHandler(async(req,res,next) => {
         if(!user) {
             throw new ErrorDealer(404, "User not found")
         }
+        if(prevImage)
+        {
+            console.log(prevImage);
+            try 
+            {
+                await deleteFromCloudinary(prevImage)
+            }
+            catch (error) 
+            {
+                console.log(error);
+            }        
+        }
+
         res
         .status(200)
         .json(new APIresponse(
@@ -297,4 +309,11 @@ const uploadImage = asyncHandler(async(req,res,next) => {
 
 })
 
-export {registerUser,loginUser, logOutUser,refreshAccessToken,updateUser,updatePassword,getUser,uploadImage}
+export {registerUser,
+    loginUser, 
+    logOutUser,
+    refreshAccessToken,
+    updateUser,
+    updatePassword,
+    getUser,
+    uploadImage}
