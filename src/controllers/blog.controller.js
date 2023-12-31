@@ -169,7 +169,10 @@ const getPopular = asyncHandler(async (req, res, next) => {
                     "authorInfo._id": 1,
                     "authorInfo.bio": 1,
                     "authorInfo.quote": 1,
-                    "authorInfo.links": 1
+                    "authorInfo.links": 1,
+                    "authorInfo.followers": 1,
+                    "authorInfo.following": 1
+
                 }
             },
             {
