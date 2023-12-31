@@ -1,10 +1,10 @@
-## BLOGGER - Full Stack Dynamic Blogging Platform
+## BLOGEZZY - Full Stack Dynamic Blogging Platform
 
 ## Description
 
-The backend of BLOGGER, which this project focuses on, includes the following functionalities:
+The backend of BLOGEZZY, which this project focuses on, includes the following functionalities:
 
-This backend project is designed to manage a blogging platform BLOGGER. It includes the following functionalities:
+This backend project is designed to manage a blogging platform BLOGEZZY. It includes the following functionalities:
 
 - **User Authentication**: Manages user registration, login, and ensures secure access. This is achieved using bcryptjs for password hashing and jsonwebtoken for generating authentication tokens.
 
