@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 
 const FollowSchema = mongoose.Schema({
-    follower: 
+    follower:
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -11,15 +11,20 @@ const FollowSchema = mongoose.Schema({
     following:
     {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",   
-        required: true, 
+        ref: "User",
+        required: true,
     },
+    isFollowed:
+    {
+        type: Boolean,
+        default: false
+    }
 
 },
-{
-    timestamps: true,
-}
+    {
+        timestamps: true,
+    }
 )
 
-export const Follow = mongoose.model("Follow",FollowSchema)
+export const Follow = mongoose.model("Follow", FollowSchema)
 
