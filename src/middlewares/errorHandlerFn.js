@@ -7,7 +7,6 @@ function errorHandlerFn(err, req, res, next) {
       errors: err.errors,
     });
   } else {
-    console.log(err);
     res.status(500).json({ message: 'An unexpected error occurred blah blah' });
   }
 }

@@ -95,7 +95,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
 
 
-    if (!existingUser) { throw new ErrorDealer(401, "Invalid Credentials") } //* step 4
+    if (!existingUser) { throw new ErrorDealer(500, "Invalid Credentials") } //* step 4
 
     const { refreshToken, accessToken } = await generateAccessAndRefereshTokens(user._id) //* step 5 and 6
 
@@ -282,7 +282,6 @@ const uploadImage = asyncHandler(async (req, res, next) => {
             throw new ErrorDealer(404, "User not found")
         }
         if (prevImage) {
-            console.log(prevImage);
             try {
                 await deleteFromCloudinary(prevImage)
             }
@@ -361,6 +360,7 @@ const isfollowing = asyncHandler(async (req, res, next) => {
         next(error)
     }
 })
+
 const followUser = asyncHandler(async (req, res, next) => {
     try {
         const userfollowing = await User.findById(req.user?._id)
