@@ -4,12 +4,12 @@ import {app} from "./app.js";
 dotenv.config({
     path: './.env'
 });
-// connectDB() 
-// .then(() => {
-//     app.listen(process.env.PORT, () => {console.log(`serving is running at ${process.env.PORT}`)})
-// })
-// .catch((error) => {
-//     console.log("MONGODB connection failed",error)
-// })
-app.listen(process.env.PORT, () => {console.log(`serving is running at ${process.env.PORT}`)})
+connectDB() 
+.then(() => {
+    app.listen(process.env.PORT, () => {console.log(`serving is running at ${process.env.PORT}`)})
+})
+.catch((error) => {
+    console.log("MONGODB connection failed",error)
+})
+// app.listen(process.env.PORT, () => {console.log(`serving is running at ${process.env.PORT}`)})
 
